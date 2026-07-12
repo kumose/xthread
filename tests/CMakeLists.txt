@@ -170,6 +170,7 @@ list(APPEND XFLOW_UNITTESTS
         test_data_pipelines
         thread_name_test
         thread_atexit_test
+        latch_test
 )
 
 # we only do exception tests if sanitizer is not enabled
