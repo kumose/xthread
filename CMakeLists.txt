@@ -42,6 +42,7 @@ set(${PROJECT_NAME}_VERSION ${PROJECT_VERSION})
 string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UP)
 
 option(PYTHON_EXTENSION "kmcmake set build shared library or not" OFF)
+option(XTHREAD_WITH_CUDA "Build CUDA support" OFF)
 set(KMCMAKE_VERSION 1.4.0)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/kmcmake)
@@ -76,8 +77,15 @@ add_subdirectory(xthread)
 ####################################################################
 # belows are auto, edit it be cation
 ####################################################################
+if (XTHREAD_WITH_CUDA)
+    enable_language(CUDA)
+endif ()
+
 if (KMCMAKE_BUILD_TEST)
     add_subdirectory(tests)
+    if (XTHREAD_WITH_CUDA)
+        add_subdirectory(tests/cuda)
+    endif ()
 endif ()
 
 if (KMCMAKE_BUILD_BENCHMARK)

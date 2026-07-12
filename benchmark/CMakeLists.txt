@@ -13,5 +13,40 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+#[[
+
+kmcmake_cc_benchmark(
+        NAME tedis_bench
+        SOURCES tedis_bench.cc
+        DEPS tedis::tedis ${KMCMAKE_DEPS_LINK} ${BENCHMARK_LIB} ${BENCHMARK_MAIN_LIB}
+        COPTS ${USER_CXX_FLAGS}
+)
+]]
 
 configure_file(${PROJECT_SOURCE_DIR}/benchmark/config.h.in ${PROJECT_SOURCE_DIR}/benchmark/config.h @ONLY)
+
+list(APPEND TF_BENCHMARKS
+        binary_tree
+        for_each
+        fibonacci
+        linear_chain
+        matrix_multiplication
+        async_task
+)
+
+if (XTHREAD_WITH_CUDA)
+    list(APPEND TF_BENCHMARKS hetero_traversal)
+endif()
+
+foreach(bench IN LISTS TF_BENCHMARKS)
+    kmcmake_cc_binary(
+            NAME ${bench}_taskflow
+            SOURCES ${bench}/taskflow.cpp
+            LINKS
+            ${KMCMAKE_DEPS_LINK}
+            DEPS
+            ${PROJECT_NAME}::xthread
+            CXXOPTS
+            ${KMCMAKE_CXX_OPTIONS}
+    )
+endforeach()
