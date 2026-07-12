@@ -1,7 +1,7 @@
 // This program performs a simple single-precision Ax+Y operation
 // using a cudaFlow capturer and verifies its result.
 
-#include <xthread/cuda/cudaflow.hpp>
+#include <xthread/cuda/cudaflow.h>
 
 // Kernel: saxpy
 __global__ void saxpy(int n, float a, float *x, float *y) {

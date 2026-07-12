@@ -2,8 +2,8 @@
 
 #include <doctest.h>
 
-#include <xthread/taskflow.hpp>
-#include <xthread/cuda/cudaflow.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/cuda/cudaflow.h>
 
 template <typename T>
 void run_and_wait(T& cf) {

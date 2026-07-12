@@ -1,9 +1,9 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <doctest.h>
-#include <xthread/taskflow.hpp>
-#include <xthread/algorithm/for_each.hpp>
-#include <xthread/cuda/cudaflow.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/algorithm/for_each.h>
+#include <xthread/cuda/cudaflow.h>
 
 #define L2(x1, y1, x2, y2) ((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2))
 

@@ -1,7 +1,7 @@
 // This is considered as "handcrafted version" using levelization
 // to avoid all tasking overhead. 
 // The performance is typically the best.
-#include "graph.hpp"
+#include "graph.h"
 #include <queue>
 
 struct cudaStream {

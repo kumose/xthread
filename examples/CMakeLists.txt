@@ -59,7 +59,7 @@ list(APPEND TF_EXAMPLES
 foreach(example IN LISTS TF_EXAMPLES)
     kmcmake_cc_binary(
             NAME ${example}
-            SOURCES ${example}.cpp
+            SOURCES ${example}.cc
             LINKS
             ${KMCMAKE_DEPS_LINK}
             DEPS

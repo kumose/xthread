@@ -1,8 +1,8 @@
 // The example shows how to use cudaFlow to multiply two 2D matrices.
 
-#include <xthread/taskflow.hpp>
-#include <xthread/algorithm/for_each.hpp>
-#include <xthread/cuda/cudaflow.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/algorithm/for_each.h>
+#include <xthread/cuda/cudaflow.h>
 
 // Kernel: matmul
 __global__ void matmul(int *a, int *b, int *c, int m, int n, int k) {

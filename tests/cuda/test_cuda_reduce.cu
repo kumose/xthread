@@ -1,9 +1,9 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <doctest.h>
-#include <xthread/taskflow.hpp>
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/reduce.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/reduce.h>
 
 // ----------------------------------------------------------------------------
 // cuda_reduce_bufsz

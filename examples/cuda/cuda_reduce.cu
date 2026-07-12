@@ -1,8 +1,8 @@
 // This program demonstrate how to perform a parallel reduction 
 // using cudaFlow.
 
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/reduce.hpp>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/reduce.h>
 
 int main(int argc, char* argv[]) {
 

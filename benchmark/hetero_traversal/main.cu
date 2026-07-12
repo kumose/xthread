@@ -1,5 +1,5 @@
-#include "graph.hpp"
-#include <CLI11.hpp>
+#include "graph.h"
+#include <CLI11.h>
 
 int main(int argc, char* argv[]) {
   

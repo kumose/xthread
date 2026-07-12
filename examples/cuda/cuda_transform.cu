@@ -1,8 +1,8 @@
 // This program demonstrates how to performs a parallel transform
 // using cudaFlow.
 
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/transform.hpp>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/transform.h>
 
 int main(int argc, char* argv[]) {
 

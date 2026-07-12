@@ -1,14 +1,14 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <doctest.h>
-#include <xthread/taskflow.hpp>
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/for_each.hpp>
-#include <xthread/cuda/algorithm/transform.hpp>
-#include <xthread/cuda/algorithm/reduce.hpp>
-#include <xthread/cuda/algorithm/sort.hpp>
-#include <xthread/cuda/algorithm/find.hpp>
-#include <xthread/cuda/algorithm/scan.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/for_each.h>
+#include <xthread/cuda/algorithm/transform.h>
+#include <xthread/cuda/algorithm/reduce.h>
+#include <xthread/cuda/algorithm/sort.h>
+#include <xthread/cuda/algorithm/find.h>
+#include <xthread/cuda/algorithm/scan.h>
 
 constexpr float eps = 0.0001f;
 

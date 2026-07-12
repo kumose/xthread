@@ -1,8 +1,8 @@
 // This program demonstrates how to find an element in a vector
 // using the CUDA standard algorithms in Taskflow.
 
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/find.hpp>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/find.h>
 
 int main(int argc, char* argv[]) {
   

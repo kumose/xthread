@@ -4,9 +4,9 @@
 //  - gpu with conditional tasking
 //  - gpu without conditional tasking
 
-#include <xthread/taskflow.hpp>
-#include <xthread/algorithm/for_each.hpp>
-#include <xthread/cuda/cudaflow.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/algorithm/for_each.h>
+#include <xthread/cuda/cudaflow.h>
 
 #include <iomanip>
 #include <cfloat>

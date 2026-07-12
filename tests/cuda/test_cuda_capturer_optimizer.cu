@@ -1,15 +1,15 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <doctest.h>
-#include <xthread/taskflow.hpp>
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/for_each.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/for_each.h>
 
-#include "./details/graph_executor.hpp"
-#include "./details/tree.hpp"
-#include "./details/random_DAG.hpp"
-#include "./details/tree.hpp"
-#include "./details/diamond.hpp"
+#include "./details/graph_executor.h"
+#include "./details/tree.h"
+#include "./details/random_DAG.h"
+#include "./details/tree.h"
+#include "./details/diamond.h"
 
 // ----------------------------------------------------------------------------
 // Graph traversal

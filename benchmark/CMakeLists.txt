@@ -41,7 +41,7 @@ endif()
 foreach(bench IN LISTS TF_BENCHMARKS)
     kmcmake_cc_binary(
             NAME ${bench}_taskflow
-            SOURCES ${bench}/taskflow.cpp
+            SOURCES ${bench}/taskflow.cc
             LINKS
             ${KMCMAKE_DEPS_LINK}
             DEPS

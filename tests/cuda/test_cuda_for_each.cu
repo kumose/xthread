@@ -1,9 +1,9 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <doctest.h>
-#include <xthread/taskflow.hpp>
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/for_each.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/for_each.h>
 
 constexpr float eps = 0.0001f;
 

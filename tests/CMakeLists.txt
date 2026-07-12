@@ -179,7 +179,7 @@ if(${sanitize} EQUAL -1)
 endif()
 
 foreach(unittest IN LISTS XFLOW_UNITTESTS)
-    add_executable(${unittest} ${unittest}.cpp)
+    add_executable(${unittest} ${unittest}.cc)
     target_link_libraries(${unittest} ${PROJECT_NAME}::xthread ${KMCMAKE_DEPS_LINK})
     target_include_directories(${unittest} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/doctest)
     doctest_discover_tests(${unittest})

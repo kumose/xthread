@@ -22,7 +22,7 @@ list(APPEND TF_DSL_EXAMPLES
 foreach(dsl_example IN LISTS TF_DSL_EXAMPLES)
   kmcmake_cc_binary(
     NAME ${dsl_example}
-    SOURCES ${dsl_example}.cpp
+    SOURCES ${dsl_example}.cc
     LINKS
     ${KMCMAKE_DEPS_LINK}
     DEPS

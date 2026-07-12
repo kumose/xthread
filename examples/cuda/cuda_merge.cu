@@ -1,5 +1,5 @@
-#include <xthread/cuda/cudaflow.hpp>
-#include <xthread/cuda/algorithm/merge.hpp>
+#include <xthread/cuda/cudaflow.h>
+#include <xthread/cuda/algorithm/merge.h>
 
 int main(int argc, char* argv[]) {
   

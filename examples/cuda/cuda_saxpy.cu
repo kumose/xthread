@@ -1,8 +1,8 @@
 // This program performs a simple single-precision Ax+Y operation
 // using cudaGraph and verifies its result.
 
-#include <xthread/taskflow.hpp>
-#include <xthread/cuda/cudaflow.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/cuda/cudaflow.h>
 
 // Kernel: saxpy
 __global__ void saxpy(int n, float a, float *x, float *y) {

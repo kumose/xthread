@@ -1,5 +1,5 @@
-#include <xthread/taskflow.hpp>
-#include <xthread/cuda/cudaflow.hpp>
+#include <xthread/taskflow.h>
+#include <xthread/cuda/cudaflow.h>
 
 int main() {
 
