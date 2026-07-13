@@ -14,7 +14,140 @@ xthread
 [English](./README.md)
 
 
-xthread 项目说明
+C++ taskflow 与线程工具库。
+
+基于 Taskflow 的 DAG 任务图执行引擎，同时提供 C++17 标准库原生缺失的轻量级线程工具。
+
+## Taskflow DAG 执行引擎
+
+```cpp
+#include <xthread/taskflow.h>  // header-only
+
+int main() {
+  xthread::Executor executor;
+  xthread::Taskflow taskflow;
+
+  auto [A, B, C, D] = taskflow.emplace(
+    [] () { std::cout << "TaskA\n"; },
+    [] () { std::cout << "TaskB\n"; },
+    [] () { std::cout << "TaskC\n"; },
+    [] () { std::cout << "TaskD\n"; }
+  );
+
+  A.precede(B, C);
+  D.succeed(B, C);
+
+  executor.run(taskflow).wait();
+  return 0;
+}
+```
+
+### 创建子图
+
+```cpp
+xthread::Task A = taskflow.emplace([](){}).name("A");
+xthread::Task C = taskflow.emplace([](){}).name("C");
+xthread::Task D = taskflow.emplace([](){}).name("D");
+
+xthread::Task B = taskflow.emplace([] (xthread::Subflow& subflow) {
+  xthread::Task B1 = subflow.emplace([](){}).name("B1");
+  xthread::Task B2 = subflow.emplace([](){}).name("B2");
+  xthread::Task B3 = subflow.emplace([](){}).name("B3");
+  B3.succeed(B1, B2);
+}).name("B");
+
+A.precede(B, C);
+D.succeed(B, C);
+```
+
+### 条件控制流
+
+```cpp
+xthread::Task init = taskflow.emplace([](){}).name("init");
+xthread::Task stop = taskflow.emplace([](){}).name("stop");
+xthread::Task cond = taskflow.emplace([](){ return std::rand() % 2; }).name("cond");
+
+init.precede(cond);
+cond.precede(cond, stop);
+```
+
+### 组合任务图
+
+```cpp
+xthread::Taskflow f1, f2;
+xthread::Task f1A = f1.emplace([]() { std::cout << "f1A\n"; }).name("f1A");
+xthread::Task f1B = f1.emplace([]() { std::cout << "f1B\n"; }).name("f1B");
+xthread::Task f2A = f2.emplace([]() { std::cout << "f2A\n"; }).name("f2A");
+xthread::Task f2B = f2.emplace([]() { std::cout << "f2B\n"; }).name("f2B");
+xthread::Task f2C = f2.emplace([]() { std::cout << "f2C\n"; }).name("f2C");
+xthread::Task f1_module = f2.composed_of(f1).name("module");
+f1_module.succeed(f2A, f2B).precede(f2C);
+```
+
+### 异步任务
+
+```cpp
+xthread::Executor executor;
+
+std::future<int> future = executor.async([](){
+  std::cout << "async task returns 1\n"; return 1;
+});
+executor.silent_async([](){ std::cout << "async task does not return\n"; });
+
+xthread::AsyncTask A = executor.silent_dependent_async([](){ printf("A\n"); });
+xthread::AsyncTask B = executor.silent_dependent_async([](){ printf("B\n"); }, A);
+executor.wait_for_all();
+```
+
+### 并行算法
+
+```cpp
+xthread::Task t1 = taskflow.for_each(first, last, [] (auto& i) { i = 100; });
+xthread::Task t2 = taskflow.reduce(first, last, init, [] (auto a, auto b) { return a + b; });
+xthread::Task t3 = taskflow.sort(first, last, [] (auto a, auto b) { return a < b; });
+```
+
+### GPU 卸载 (CUDA)
+
+```cpp
+xthread::Task cudaflow = taskflow.emplace([&]() {
+  xthread::cudaGraph cg;
+  xthread::cudaTask h2d_x = cg.copy(dx, hx.data(), N);
+  xthread::cudaTask h2d_y = cg.copy(dy, hy.data(), N);
+  xthread::cudaTask d2h_x = cg.copy(hx.data(), dx, N);
+  xthread::cudaTask d2h_y = cg.copy(hy.data(), dy, N);
+  xthread::cudaTask saxpy = cg.kernel((N+255)/256, 256, 0, saxpy, N, 2.0f, dx, dy);
+  saxpy.succeed(h2d_x, h2d_y).precede(d2h_x, d2h_y);
+  xthread::cudaGraphExec exec(cg);
+  xthread::cudaStream stream;
+  stream.run(exec).synchronize();
+}).name("CUDA Graph Task");
+```
+
+### 执行 Taskflow
+
+```cpp
+xthread::Future<void> run_once = executor.run(taskflow);
+run_once.get();
+executor.run_n(taskflow, 4);
+executor.run_until(taskflow, [counter=5](){ return --counter == 0; });
+executor.wait_for_all();
+```
+
+### 可视化
+
+```cpp
+taskflow.dump(std::cout);
+```
+
+## 线程工具
+
+| 头文件 | 说明 |
+|--------|------|
+| `thread_name.h` | 跨平台设置/读取线程名 |
+| `thread_atexit.h` | 线程退出回调，支持 handle 取消 |
+| `latch.h` | 倒计数门闩，兼容 C++20 std::latch |
+| `simple_thread.h` | 带虚函数 run() 和停止控制的 RAII 线程封装 |
 
 ## 🛠️ Build
 

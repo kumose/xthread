@@ -14,9 +14,65 @@
 # limitations under the License.
 #
 
-kmcmake_cc_binary(
-        NAME foo_ex
-        SOURCES foo_ex.cc
-        DEPS ${PROJECT_NAME}::foo ${KMCMAKE_DEPS_LINK}
-        COPTS ${KMCMAKE_CXX_OPTIONS}
+list(APPEND TF_EXAMPLES
+        simple
+        attach_data
+        async
+        async_module
+        runtime_async
+        dependent_async
+        observer
+        subflow
+        fibonacci
+        condition
+        multi_condition
+        switch_case
+        do_while_loop
+        while_loop
+        for_loop
+        if_else
+        nested_if_else
+        visualization
+        parallel_for
+        parallel_sort
+        parallel_reduce
+        inclusive_scan
+        exclusive_scan
+        pipeline
+        scalable_pipeline
+        text_pipeline
+        taskflow_pipeline
+        parallel_graph_pipeline
+        parallel_data_pipeline
+        run
+        corun
+        runtime
+        composition
+        limited_concurrency
+        cancel
+        exception
+        subflow_exception
+        worker_interface
+        task_visitor
 )
+
+foreach(example IN LISTS TF_EXAMPLES)
+    kmcmake_cc_binary(
+            NAME ${example}
+            SOURCES ${example}.cc
+            LINKS
+            ${KMCMAKE_DEPS_LINK}
+            DEPS
+            ${PROJECT_NAME}::xthread
+            CXXOPTS
+            ${KMCMAKE_CXX_OPTIONS}
+    )
+endforeach()
+
+if (XTHREAD_WITH_CUDA)
+    add_subdirectory(cuda)
+endif()
+
+if (EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/dsl)
+    add_subdirectory(dsl)
+endif()

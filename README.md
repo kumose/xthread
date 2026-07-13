@@ -14,7 +14,156 @@ xthread
 [中文版](./README_CN.md)
 
 
-xthread Project Description
+C++ taskflow and threading utility library.
+
+xthread brings Taskflow's DAG task graph execution together with
+lightweight C++17 threading utilities that the standard library
+does not provide natively.
+
+## Taskflow DAG Executor
+
+```cpp
+#include <xthread/taskflow.h>  // xthread is header-only
+
+int main() {
+  xthread::Executor executor;
+  xthread::Taskflow taskflow;
+
+  auto [A, B, C, D] = taskflow.emplace(
+    [] () { std::cout << "TaskA\n"; },
+    [] () { std::cout << "TaskB\n"; },
+    [] () { std::cout << "TaskC\n"; },
+    [] () { std::cout << "TaskD\n"; }
+  );
+
+  A.precede(B, C);
+  D.succeed(B, C);
+
+  executor.run(taskflow).wait();
+  return 0;
+}
+```
+
+### Create a Subflow Graph
+
+```cpp
+xthread::Task A = taskflow.emplace([](){}).name("A");
+xthread::Task C = taskflow.emplace([](){}).name("C");
+xthread::Task D = taskflow.emplace([](){}).name("D");
+
+xthread::Task B = taskflow.emplace([] (xthread::Subflow& subflow) {
+  xthread::Task B1 = subflow.emplace([](){}).name("B1");
+  xthread::Task B2 = subflow.emplace([](){}).name("B2");
+  xthread::Task B3 = subflow.emplace([](){}).name("B3");
+  B3.succeed(B1, B2);
+}).name("B");
+
+A.precede(B, C);
+D.succeed(B, C);
+```
+
+### Integrate Control Flow
+
+```cpp
+xthread::Task init = taskflow.emplace([](){}).name("init");
+xthread::Task stop = taskflow.emplace([](){}).name("stop");
+xthread::Task cond = taskflow.emplace([](){ return std::rand() % 2; }).name("cond");
+
+init.precede(cond);
+cond.precede(cond, stop);
+```
+
+### Compose Task Graphs
+
+```cpp
+xthread::Taskflow f1, f2;
+
+xthread::Task f1A = f1.emplace([]() { std::cout << "f1A\n"; }).name("f1A");
+xthread::Task f1B = f1.emplace([]() { std::cout << "f1B\n"; }).name("f1B");
+
+xthread::Task f2A = f2.emplace([]() { std::cout << "f2A\n"; }).name("f2A");
+xthread::Task f2B = f2.emplace([]() { std::cout << "f2B\n"; }).name("f2B");
+xthread::Task f2C = f2.emplace([]() { std::cout << "f2C\n"; }).name("f2C");
+xthread::Task f1_module = f2.composed_of(f1).name("module");
+
+f1_module.succeed(f2A, f2B).precede(f2C);
+```
+
+### Launch Asynchronous Tasks
+
+```cpp
+xthread::Executor executor;
+
+std::future<int> future = executor.async([](){
+  std::cout << "async task returns 1\n";
+  return 1;
+});
+executor.silent_async([](){ std::cout << "async task does not return\n"; });
+
+xthread::AsyncTask A = executor.silent_dependent_async([](){ printf("A\n"); });
+xthread::AsyncTask B = executor.silent_dependent_async([](){ printf("B\n"); }, A);
+xthread::AsyncTask C = executor.silent_dependent_async([](){ printf("C\n"); }, A);
+xthread::AsyncTask D = executor.silent_dependent_async([](){ printf("D\n"); }, B, C);
+
+executor.wait_for_all();
+```
+
+### Parallel Algorithms
+
+```cpp
+xthread::Task task1 = taskflow.for_each(first, last, [] (auto& i) { i = 100; });
+xthread::Task task2 = taskflow.reduce(first, last, init, [] (auto a, auto b) { return a + b; });
+xthread::Task task3 = taskflow.sort(first, last, [] (auto a, auto b) { return a < b; });
+```
+
+### GPU Offloading (CUDA)
+
+```cpp
+xthread::Task cudaflow = taskflow.emplace([&]() {
+  xthread::cudaGraph cg;
+  xthread::cudaTask h2d_x = cg.copy(dx, hx.data(), N);
+  xthread::cudaTask h2d_y = cg.copy(dy, hy.data(), N);
+  xthread::cudaTask d2h_x = cg.copy(hx.data(), dx, N);
+  xthread::cudaTask d2h_y = cg.copy(hy.data(), dy, N);
+  xthread::cudaTask saxpy = cg.kernel((N+255)/256, 256, 0, saxpy, N, 2.0f, dx, dy);
+  saxpy.succeed(h2d_x, h2d_y).precede(d2h_x, d2h_y);
+  xthread::cudaGraphExec exec(cg);
+  xthread::cudaStream stream;
+  stream.run(exec).synchronize();
+}).name("CUDA Graph Task");
+```
+
+### Run a Taskflow
+
+```cpp
+// run once
+xthread::Future<void> run_once = executor.run(taskflow);
+run_once.get();
+
+// run four times
+executor.run_n(taskflow, 4);
+
+// run until condition
+executor.run_until(taskflow, [counter=5](){ return --counter == 0; });
+
+// block until all complete
+executor.wait_for_all();
+```
+
+### Visualize a Taskflow Graph
+
+```cpp
+taskflow.dump(std::cout);
+```
+
+## Thread Utilities
+
+| Header | Description |
+|--------|-------------|
+| `thread_name.h` | SetCurrentThreadName / CurrentThreadName (cross-platform) |
+| `thread_atexit.h` | Thread-local cleanup callbacks with handle-based cancellation |
+| `latch.h` | Countdown latch, API-compatible with C++20 std::latch |
+| `simple_thread.h` | RAII thread with virtual run() and stop control |
 
 ## 🛠️ Build
 
