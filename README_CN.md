@@ -14,7 +14,18 @@ xthread
 [English](./README.md)
 
 
-xthread 项目说明
+C++ taskflow 与线程工具库。
+
+基于 Taskflow 的 DAG 任务图执行引擎，同时提供 C++17 标准库原生缺失的轻量级线程工具。
+
+### 线程工具
+
+| 头文件 | 说明 |
+|--------|------|
+| `thread_name.h` | 跨平台设置/读取线程名 |
+| `thread_atexit.h` | 线程退出回调，支持 handle 取消 |
+| `latch.h` | 倒计数门闩，兼容 C++20 std::latch |
+| `simple_thread.h` | 带虚函数 run() 和停止控制的 RAII 线程封装 |
 
 ## 🛠️ Build
 

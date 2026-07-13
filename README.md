@@ -14,7 +14,20 @@ xthread
 [中文版](./README_CN.md)
 
 
-xthread Project Description
+C++ taskflow and threading utility library.
+
+xthread brings Taskflow's DAG task graph execution together with
+lightweight C++17 threading utilities that the standard library
+does not provide natively.
+
+### Thread Utilities
+
+| Header | Description |
+|--------|-------------|
+| `thread_name.h` | SetCurrentThreadName / CurrentThreadName (cross-platform) |
+| `thread_atexit.h` | Thread-local cleanup callbacks with handle-based cancellation |
+| `latch.h` | Countdown latch, API-compatible with C++20 std::latch |
+| `simple_thread.h` | RAII thread with virtual run() and stop control |
 
 ## 🛠️ Build
 
