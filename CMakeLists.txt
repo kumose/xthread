@@ -43,7 +43,7 @@ string(TOUPPER ${PROJECT_NAME} PROJECT_NAME_UP)
 
 option(PYTHON_EXTENSION "kmcmake set build shared library or not" OFF)
 option(XTHREAD_WITH_CUDA "Build CUDA support" OFF)
-set(KMCMAKE_VERSION 1.4.0)
+set(KMCMAKE_VERSION 1.5.1)
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/kmcmake)
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/kmcmake/tools)
@@ -99,13 +99,7 @@ if(NOT PYTHON_EXTENSION)
     ##############################################
     # header installing
     #############################################
-    install(DIRECTORY ${PROJECT_NAME}
-            DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
-            FILES_MATCHING
-            PATTERN "*.inc"
-            PATTERN "*.h"
-            PATTERN "*.hpp"
-            )
+    include(xthread_install_header)
 
     # Layout. This works for all platforms:
     #   * <prefix>//cmake/<PROJECT-NAME>
