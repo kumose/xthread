@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [master, feat/ci, dev]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  ubuntu:
+    uses: kumose/x-ci/.github/workflows/ubuntu.yml@v2
+    with:
+      config-command: |
+        cmake --preset=default -DKMCMAKE_BUILD_TEST=ON -DCMAKE_BUILD_TYPE=Release
+      build-command: |
+        cmake --build build --parallel
+      test-command: |
+        ctest --test-dir build --output-on-failure -j1
+
+  alpine:
+    uses: kumose/x-ci/.github/workflows/alpine.yml@v2
+    with:
+      skip-arm: true
+      config-command: |
+        cmake --preset=default -DKMCMAKE_BUILD_TEST=ON -DCMAKE_BUILD_TYPE=Release
+      build-command: |
+        cmake --build build --parallel
+      test-command: |
+        ctest --test-dir build --output-on-failure -j1
+
+  centos:
+    uses: kumose/x-ci/.github/workflows/centos.yml@v2
+    with:
+      config-command: |
+        cmake --preset=default -DKMCMAKE_BUILD_TEST=ON -DCMAKE_BUILD_TYPE=Release
+      build-command: |
+        cmake --build build --parallel
+      test-command: |
+        ctest --test-dir build --output-on-failure -j1
+
+  mac:
+    uses: kumose/x-ci/.github/workflows/mac.yml@v2
+    with:
+      skip-amd: true
+      config-command: |
+        cmake --preset=default -DKMCMAKE_BUILD_TEST=ON -DCMAKE_BUILD_TYPE=Release
+      build-command: |
+        cmake --build build --parallel
+      test-command: |
+        ctest --test-dir build --output-on-failure -j1
+
+  windows:
+    uses: kumose/x-ci/.github/workflows/windows.yml@v2
+    with:
+      skip-arm: true
+      config-command: |
+        cmake --preset=ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=cl -DCMAKE_CXX_COMPILER=cl -DCMAKE_MAKE_PROGRAM="$env:CMAKE_MAKE_PROGRAM" -DKMCMAKE_BUILD_TEST=ON
+      build-command: |
+        cmake --build build-ninja --parallel
+      test-command: |
+        ctest --test-dir build-ninja --output-on-failure -j1

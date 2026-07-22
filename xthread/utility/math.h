@@ -2,6 +2,8 @@
 
 #include <atomic>
 #include <chrono>
+#include <numeric>
+#include <type_traits>
 
 namespace xthread {
     /**
